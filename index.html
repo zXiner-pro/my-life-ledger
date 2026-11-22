@@ -8,8 +8,8 @@
     <link rel="apple-touch-icon" href="./ledger-180.png" />
     <link rel="manifest" href="./ledger.webmanifest" />
     <title>我的生活账本</title>
-    <script type="module" crossorigin src="./index-BmYCkfJH.js"></script>
-    <link rel="stylesheet" crossorigin href="./index-Dgf88WYh.css">
+    <script type="module" crossorigin src="./index-Cp2wigJF.js"></script>
+    <link rel="stylesheet" crossorigin href="./index-CFzPYTRx.css">
   </head>
   <body>
     <div class="app-shell">
@@ -20,7 +20,10 @@
 
       <main id="content">
         <p class="notice" id="load-error" role="alert" hidden>暂时无法读取账本，请刷新页面重试。</p>
-        <p class="notice" id="save-status" role="status"></p>
+        <div class="save-notice" id="save-notice" hidden>
+          <p class="notice" id="save-status" role="status"></p>
+          <button type="button" class="bill-action" id="undo-delete" hidden>撤销</button>
+        </div>
 
         <section data-page="home" aria-label="首页">
           <section class="cycle-card" aria-labelledby="cycle-heading">
@@ -61,6 +64,10 @@
 
         <section class="panel" data-page="bills" aria-labelledby="bills-heading" hidden>
           <div class="section-heading"><h2 id="bills-heading">历史账单</h2></div>
+          <details class="deleted-history" id="deleted-history" hidden>
+            <summary id="deleted-summary">已删除账单</summary>
+            <ul class="bill-list" id="deleted-bills"></ul>
+          </details>
           <ul class="bill-list" id="all-bills"></ul>
           <p class="empty-state" id="bills-empty" hidden>暂无账单</p>
         </section>

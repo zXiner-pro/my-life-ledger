@@ -1,5 +1,5 @@
-const SHELL_VERSION = "2b67e76d05856966"
-const SHELL_FILES = ["index-BmYCkfJH.js","index-Dgf88WYh.css","index.html","ledger-180.png","ledger-192.png","ledger-512.png","ledger.webmanifest"]
+const SHELL_VERSION = "3a7af0abe1a46ba7"
+const SHELL_FILES = ["index-CFzPYTRx.css","index-Cp2wigJF.js","index.html","ledger-180.png","ledger-192.png","ledger-512.png","ledger.webmanifest"]
 const cachePrefix = 'ledger-shell:' + self.registration.scope + ':'
 const cacheName = cachePrefix + SHELL_VERSION
 const startUrl = new URL('./', self.registration.scope)
