@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f4f5ef" />
+    <meta name="theme-color" content="#f7f5ee" />
     <link rel="icon" type="image/png" href="./ledger-192.png" />
     <link rel="apple-touch-icon" href="./ledger-180.png" />
     <link rel="manifest" href="./ledger.webmanifest" />
     <title>我的生活账本</title>
-    <script type="module" crossorigin src="./index-Cp2wigJF.js"></script>
-    <link rel="stylesheet" crossorigin href="./index-CFzPYTRx.css">
+    <script type="module" crossorigin src="./index-DSVqP5wc.js"></script>
+    <link rel="stylesheet" crossorigin href="./index-Bx4uCcYP.css">
   </head>
   <body>
     <div class="app-shell">
@@ -32,10 +32,12 @@
               <p id="cycle-status">待初始化</p>
             </div>
             <p id="cycle-dates" class="cycle-dates" hidden></p>
+            <dl class="cycle-balance">
+              <div><dt>本期剩余</dt><dd data-cycle-amount="balanceFen">—</dd></div>
+            </dl>
             <dl class="cycle-totals">
               <div><dt>本期生活费</dt><dd data-cycle-amount="incomeFen">—</dd></div>
               <div><dt>本期支出</dt><dd data-cycle-amount="spentFen">—</dd></div>
-              <div><dt>本期剩余</dt><dd data-cycle-amount="balanceFen">—</dd></div>
             </dl>
             <dl id="cycle-assets" class="cycle-assets" hidden>
               <div><dt>上期结转</dt><dd data-cycle-amount="carryFen">—</dd></div>
@@ -72,12 +74,27 @@
           <p class="empty-state" id="bills-empty" hidden>暂无账单</p>
         </section>
 
-        <section class="panel" data-page="analytics" aria-labelledby="analytics-heading" hidden>
-          <div class="section-heading"><h2 id="analytics-heading">收支概览</h2></div>
-          <dl class="analytics-totals">
-            <div><dt>支出笔数</dt><dd id="analytics-expense-count">—</dd></div>
-            <div><dt>生活费到账笔数</dt><dd id="analytics-income-count">—</dd></div>
-          </dl>
+        <section class="analysis" data-page="analytics" aria-labelledby="analytics-heading" hidden>
+          <h2 id="analytics-heading">消费分析</h2>
+          <div class="analysis-controls" role="group" aria-label="统计范围">
+            <button class="button secondary" type="button" data-analytics-scope="month" aria-pressed="true">按月份</button>
+            <button class="button secondary" type="button" data-analytics-scope="cycle" aria-pressed="false">当前生活费周期</button>
+          </div>
+          <label class="field analysis-month">
+            <span>选择月份</span>
+            <select id="analytics-month" disabled><option value="">本月</option></select>
+          </label>
+
+          <section class="analysis-total" aria-labelledby="analytics-total-heading">
+            <h3 id="analytics-total-heading">本月支出</h3>
+            <p id="analytics-total" class="analysis-amount">—</p>
+            <p id="analytics-dates" class="analysis-dates"></p>
+          </section>
+          <section class="panel analysis-breakdown" aria-labelledby="analytics-group-heading">
+            <div class="section-heading"><h3 id="analytics-group-heading">钱花在哪</h3></div>
+            <p class="empty-state" id="analytics-empty" hidden></p>
+            <div id="analytics-groups"></div>
+          </section>
         </section>
       </main>
 
@@ -94,12 +111,14 @@
       <form>
         <h2 id="form-heading">记一笔支出</h2>
         <div class="form-fields">
-          <label class="field" data-expense-field>
-            <span>消费分类</span>
-            <select name="category" required>
-              <option value="">请选择</option>
-            </select>
-          </label>
+          <fieldset class="category-field" aria-describedby="form-error">
+            <legend>消费分类</legend>
+            <div class="category-options" id="quick-categories"></div>
+            <details id="more-categories" class="more-categories">
+              <summary>更多分类</summary>
+              <div class="category-options"></div>
+            </details>
+          </fieldset>
           <label class="field">
             <span>金额（元）</span>
             <input name="amount" type="text" inputmode="decimal" placeholder="0.00" maxlength="24" aria-describedby="form-error" required />
@@ -108,7 +127,7 @@
             <span id="transaction-date-label">消费时间</span>
             <input name="date" type="datetime-local" required />
           </label>
-          <label class="field" data-expense-field>
+          <label class="field" data-payment-field>
             <span>支付方式</span>
             <select name="paymentMethod" required></select>
           </label>
