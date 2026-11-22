@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f4f5ef" />
+    <link rel="icon" type="image/png" href="./ledger-192.png" />
+    <link rel="apple-touch-icon" href="./ledger-180.png" />
+    <link rel="manifest" href="./ledger.webmanifest" />
+    <title>我的生活账本</title>
+    <script type="module" crossorigin src="./index-BmYCkfJH.js"></script>
+    <link rel="stylesheet" crossorigin href="./index-Dgf88WYh.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="brand">
+        <img src="./ledger-192.png" width="44" height="44" alt="" />
+        <h1>我的生活账本</h1>
+      </header>
+
+      <main id="content">
+        <p class="notice" id="load-error" role="alert" hidden>暂时无法读取账本，请刷新页面重试。</p>
+        <p class="notice" id="save-status" role="status"></p>
+
+        <section data-page="home" aria-label="首页">
+          <section class="cycle-card" aria-labelledby="cycle-heading">
+            <div class="cycle-heading">
+              <h2 id="cycle-heading">生活费周期</h2>
+              <p id="cycle-status">待初始化</p>
+            </div>
+            <p id="cycle-dates" class="cycle-dates" hidden></p>
+            <dl class="cycle-totals">
+              <div><dt>本期生活费</dt><dd data-cycle-amount="incomeFen">—</dd></div>
+              <div><dt>本期支出</dt><dd data-cycle-amount="spentFen">—</dd></div>
+              <div><dt>本期剩余</dt><dd data-cycle-amount="balanceFen">—</dd></div>
+            </dl>
+            <dl id="cycle-assets" class="cycle-assets" hidden>
+              <div><dt>上期结转</dt><dd data-cycle-amount="carryFen">—</dd></div>
+              <div><dt>当前总资产</dt><dd data-cycle-amount="totalAssetsFen">—</dd></div>
+            </dl>
+            <div class="cycle-actions">
+              <p id="cycle-upcoming" class="cycle-upcoming" hidden></p>
+              <button class="button cycle-button" id="cycle-start" type="button" disabled>开始周期</button>
+            </div>
+          </section>
+
+          <div class="quick-actions">
+            <button class="button primary" type="button" data-add="expense">记一笔支出</button>
+            <button class="button secondary" type="button" data-add="income">生活费到账</button>
+          </div>
+
+          <section class="panel" aria-labelledby="recent-heading">
+            <div class="section-heading">
+              <h2 id="recent-heading">最近消费</h2>
+              <a href="#bills">查看账单</a>
+            </div>
+            <ul class="bill-list" id="recent-expenses"></ul>
+            <p class="empty-state" id="recent-empty" hidden>暂无消费记录</p>
+          </section>
+        </section>
+
+        <section class="panel" data-page="bills" aria-labelledby="bills-heading" hidden>
+          <div class="section-heading"><h2 id="bills-heading">历史账单</h2></div>
+          <ul class="bill-list" id="all-bills"></ul>
+          <p class="empty-state" id="bills-empty" hidden>暂无账单</p>
+        </section>
+
+        <section class="panel" data-page="analytics" aria-labelledby="analytics-heading" hidden>
+          <div class="section-heading"><h2 id="analytics-heading">收支概览</h2></div>
+          <dl class="analytics-totals">
+            <div><dt>支出笔数</dt><dd id="analytics-expense-count">—</dd></div>
+            <div><dt>生活费到账笔数</dt><dd id="analytics-income-count">—</dd></div>
+          </dl>
+        </section>
+      </main>
+
+      <nav class="navigation" aria-label="主导航">
+        <div class="navigation-inner">
+          <a href="#home" aria-current="page">首页</a>
+          <a href="#bills">账单</a>
+          <a href="#analytics">分析</a>
+        </div>
+      </nav>
+    </div>
+
+    <dialog class="entry-dialog" id="transaction-dialog" aria-labelledby="form-heading">
+      <form>
+        <h2 id="form-heading">记一笔支出</h2>
+        <div class="form-fields">
+          <label class="field" data-expense-field>
+            <span>消费分类</span>
+            <select name="category" required>
+              <option value="">请选择</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>金额（元）</span>
+            <input name="amount" type="text" inputmode="decimal" placeholder="0.00" maxlength="24" aria-describedby="form-error" required />
+          </label>
+          <label class="field date-field">
+            <span id="transaction-date-label">消费时间</span>
+            <input name="date" type="datetime-local" required />
+          </label>
+          <label class="field" data-expense-field>
+            <span>支付方式</span>
+            <select name="paymentMethod" required></select>
+          </label>
+          <label class="field">
+            <span>备注 <small>选填</small></span>
+            <textarea name="note" rows="2" maxlength="500" placeholder="写点什么…"></textarea>
+          </label>
+        </div>
+        <p class="form-error" id="form-error" role="alert"></p>
+        <div class="form-actions">
+          <button class="button secondary" type="button" data-cancel>取消</button>
+          <button class="button primary" type="submit">保存</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog class="entry-dialog" id="cycle-dialog" aria-labelledby="cycle-form-heading">
+      <form>
+        <h2 id="cycle-form-heading">开始周期</h2>
+        <div class="form-fields">
+          <label class="field">
+            <span>周期开始日期</span>
+            <input name="startDate" type="date" min="0001-01-01" max="9999-12-02" required />
+          </label>
+          <label class="field">
+            <span>本期生活费到账</span>
+            <select name="incomeId" required></select>
+          </label>
+        </div>
+        <p class="cycle-form-hint" id="cycle-no-income" hidden>请先记一笔生活费到账，再回来选择。</p>
+        <p class="form-error" id="cycle-form-error" role="alert"></p>
+        <div class="form-actions">
+          <button class="button secondary" type="button" data-cancel>取消</button>
+          <button class="button primary" type="submit">保存周期</button>
+        </div>
+      </form>
+    </dialog>
+    <noscript>请启用 JavaScript 后使用生活账本。</noscript>
+  </body>
+</html>
