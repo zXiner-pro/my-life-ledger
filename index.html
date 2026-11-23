@@ -11,8 +11,8 @@
     <link rel="apple-touch-icon" href="./ledger-comet-180.png" />
     <link rel="manifest" href="./ledger.webmanifest" />
     <title>Ledger</title>
-    <script type="module" crossorigin src="./index-CRn37YYa.js"></script>
-    <link rel="stylesheet" crossorigin href="./index-BY3MH3ot.css">
+    <script type="module" crossorigin src="./index-TwmldTWm.js"></script>
+    <link rel="stylesheet" crossorigin href="./index-DSSezNfn.css">
   </head>
   <body>
     <div id="startup-greeting" class="startup-greeting" aria-hidden="true" hidden>
@@ -133,9 +133,19 @@
 
     <dialog class="entry-dialog" id="transaction-dialog" aria-labelledby="form-heading">
       <form>
-        <h2 id="form-heading" tabindex="-1" autofocus>记一笔支出</h2>
+        <div class="expense-handle" hidden aria-hidden="true"></div>
+        <div class="transaction-heading">
+          <h2 id="form-heading" tabindex="-1" autofocus>记一笔支出</h2>
+        </div>
         <div class="transaction-scroll">
           <div class="form-fields">
+            <label class="field transaction-amount-field">
+              <span>金额（元）</span>
+              <span class="transaction-amount-input">
+                <span class="expense-currency" aria-hidden="true">¥</span>
+                <input name="amount" type="text" inputmode="decimal" placeholder="0.00" maxlength="24" aria-describedby="form-error" required />
+              </span>
+            </label>
             <fieldset class="category-field" aria-describedby="form-error">
               <legend>消费分类</legend>
               <div class="category-options" id="quick-categories"></div>
@@ -144,10 +154,6 @@
                 <div class="category-options"></div>
               </details>
             </fieldset>
-            <label class="field transaction-amount-field">
-              <span>金额（元）</span>
-              <input name="amount" type="text" inputmode="decimal" placeholder="0.00" maxlength="24" aria-describedby="form-error" required />
-            </label>
             <details class="entry-disclosure date-disclosure" id="income-date-field" hidden>
               <summary>
                 <span>到账日期</span>
@@ -161,15 +167,15 @@
               </div>
             </details>
             <div id="income-note-slot" hidden></div>
-            <div class="expense-settings">
-              <details id="expense-date" class="entry-disclosure">
-                <summary>
-                  <span>消费时间</span>
-                  <span id="expense-date-value" class="entry-disclosure-value"></span>
-                </summary>
-                <div class="entry-disclosure-fields">
+            <details id="expense-date" class="entry-disclosure expense-settings">
+              <summary>
+                <span>详情</span>
+                <span class="entry-disclosure-value"><span id="expense-date-value"></span> · <span id="expense-payment-value"></span></span>
+              </summary>
+              <div class="entry-disclosure-fields">
+                <div class="expense-date-fields">
                   <label class="field">
-                    <span>日期</span>
+                    <span>消费日期</span>
                     <input name="date" type="date" min="0001-01-01" max="9999-12-31" required />
                   </label>
                   <label class="field">
@@ -177,24 +183,16 @@
                     <input name="time" type="time" required />
                   </label>
                 </div>
-              </details>
-              <details id="expense-options" class="entry-disclosure">
-                <summary>
-                  <span>支付与备注</span>
-                  <span id="expense-payment-value" class="entry-disclosure-value"></span>
-                </summary>
-                <div class="entry-disclosure-fields">
-                  <label class="field">
-                    <span>支付方式</span>
-                    <select name="paymentMethod" required></select>
-                  </label>
-                  <label class="field" data-note-field>
-                    <span>备注 <small>选填</small></span>
-                    <textarea name="note" rows="2" maxlength="500" placeholder="写点什么…"></textarea>
-                  </label>
-                </div>
-              </details>
-            </div>
+                <label class="field">
+                  <span>支付方式</span>
+                  <select name="paymentMethod" required></select>
+                </label>
+                <label class="field" data-note-field>
+                  <span>备注 <small>选填</small></span>
+                  <textarea name="note" rows="2" maxlength="500" placeholder="写点什么…"></textarea>
+                </label>
+              </div>
+            </details>
           </div>
         </div>
         <p class="form-error" id="form-error" role="alert"></p>
