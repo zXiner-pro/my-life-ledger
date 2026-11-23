@@ -3,19 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f6f5f2" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f5f6f8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15171c" media="(prefers-color-scheme: dark)" />
+    <meta name="apple-mobile-web-app-title" content="Ledger" />
     <link rel="icon" type="image/png" href="./ledger-192.png" />
     <link rel="apple-touch-icon" href="./ledger-180.png" />
     <link rel="manifest" href="./ledger.webmanifest" />
-    <title>我的生活账本</title>
-    <script type="module" crossorigin src="./index-Cw023naV.js"></script>
-    <link rel="stylesheet" crossorigin href="./index-C5iotMl6.css">
+    <title>Ledger</title>
+    <script type="module" crossorigin src="./index-DP4Y50bw.js"></script>
+    <link rel="stylesheet" crossorigin href="./index-CXD0mqCp.css">
   </head>
   <body>
+    <div id="startup-greeting" class="startup-greeting" aria-hidden="true" hidden>
+      <svg viewBox="0 0 246 112" focusable="false">
+        <path pathLength="1" d="M15 85c10-23 29-67 23-70-8-5-20 43-23 70 14-38 35-45 31-23-2 13-11 32 2 25 4-2 9-6 13-10"/>
+        <path pathLength="1" d="M60 77c17-4 28-18 22-23-6-5-17 6-20 20-4 18 10 20 24 7l10-11"/>
+        <path pathLength="1" d="M95 70c15-17 27-44 27-56-1-13-13 2-20 26-8 24-13 46-3 48 5 1 11-5 20-15"/>
+        <path pathLength="1" d="M119 73c16-18 33-53 30-64-3-9-15 11-23 33-8 23-14 44-4 46 6 1 14-7 23-18"/>
+        <path pathLength="1" d="M146 70c6-13 19-18 23-8 4 12-6 29-16 29-12 0-13-17-3-28 5-6 11-8 16-3 4 6 11 11 23 5 11-5 23-14 39-14"/>
+      </svg>
+    </div>
     <div class="app-shell">
       <header class="brand">
-        <img src="./ledger-192.png" width="44" height="44" alt="" />
-        <h1>我的生活账本</h1>
+        <h1>Ledger</h1>
+        <button class="button secondary income-entry" type="button" data-add="income">生活费到账</button>
       </header>
 
       <main id="content">
@@ -29,30 +41,24 @@
           <section class="cycle-card" aria-labelledby="cycle-heading">
             <div class="cycle-heading">
               <h2 id="cycle-heading">生活费周期</h2>
-              <p id="cycle-status">待初始化</p>
+              <p id="cycle-dates" class="cycle-dates" hidden></p>
             </div>
-            <p id="cycle-dates" class="cycle-dates" hidden></p>
-            <dl class="cycle-balance">
-              <div><dt>本期剩余</dt><dd data-cycle-amount="balanceFen">—</dd></div>
-            </dl>
-            <dl class="cycle-totals">
-              <div><dt>本期生活费</dt><dd data-cycle-amount="incomeFen">—</dd></div>
-              <div><dt>本期支出</dt><dd data-cycle-amount="spentFen">—</dd></div>
-            </dl>
-            <dl id="cycle-assets" class="cycle-assets" hidden>
-              <div><dt>上期结转</dt><dd data-cycle-amount="carryFen">—</dd></div>
-              <div><dt>当前总资产</dt><dd data-cycle-amount="totalAssetsFen">—</dd></div>
-            </dl>
-            <div class="cycle-actions">
+            <p id="cycle-balance" class="cycle-balance" data-cycle-amount="balanceFen" hidden>—</p>
+            <p id="cycle-status">待初始化</p>
+            <details class="cycle-details" id="cycle-details" hidden>
+              <summary>周期详情</summary>
+              <dl class="cycle-totals">
+                <div><dt>本期生活费</dt><dd data-cycle-amount="incomeFen">—</dd></div>
+                <div><dt>本期支出</dt><dd data-cycle-amount="spentFen">—</dd></div>
+                <div><dt>上期结转</dt><dd data-cycle-amount="carryFen">—</dd></div>
+                <div><dt>当前总资产</dt><dd data-cycle-amount="totalAssetsFen">—</dd></div>
+              </dl>
+            </details>
+            <div class="cycle-actions" id="cycle-actions">
               <p id="cycle-upcoming" class="cycle-upcoming" hidden></p>
               <button class="button cycle-button" id="cycle-start" type="button" disabled>开始周期</button>
             </div>
           </section>
-
-          <div class="quick-actions">
-            <button class="button primary" type="button" data-add="expense">记一笔支出</button>
-            <button class="button secondary" type="button" data-add="income">生活费到账</button>
-          </div>
 
           <section class="panel" aria-labelledby="recent-heading">
             <div class="section-heading">
@@ -68,6 +74,7 @@
           <div class="section-heading"><h2 id="bills-heading">历史账单</h2></div>
           <details class="deleted-history" id="deleted-history" hidden>
             <summary id="deleted-summary">已删除账单</summary>
+            <div class="archive-actions"><button class="bill-action" id="purge-deleted" type="button">清空已删除账单</button></div>
             <ul class="bill-list" id="deleted-bills"></ul>
           </details>
           <ul class="bill-list" id="all-bills"></ul>
@@ -100,21 +107,26 @@
 
       <nav class="navigation" aria-label="主导航">
         <div class="navigation-inner">
-          <a href="#home" aria-current="page">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="m3 10 9-7 9 7M5 9v11h5v-5a2 2 0 0 1 4 0v5h5V9"/>
-            </svg><span>首页</span>
-          </a>
-          <a href="#bills">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Zm3 5h6m-6 4h6"/>
-            </svg><span>账单</span>
-          </a>
-          <a href="#analytics">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M4 4v16h16M8 16v-4m5 4V7m5 9v-7"/>
-            </svg><span>分析</span>
-          </a>
+          <div class="navigation-tabs">
+            <a href="#home" aria-current="page">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="m3 10 9-7 9 7M5 9v11h5v-5a2 2 0 0 1 4 0v5h5V9"/>
+              </svg><span>首页</span>
+            </a>
+            <a href="#bills">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Zm3 5h6m-6 4h6"/>
+              </svg><span>账单</span>
+            </a>
+            <a href="#analytics">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M4 4v16h16M8 16v-4m5 4V7m5 9v-7"/>
+              </svg><span>分析</span>
+            </a>
+          </div>
+          <button class="navigation-add" type="button" data-add="expense" aria-label="记一笔支出">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
         </div>
       </nav>
     </div>
@@ -192,6 +204,17 @@
         </div>
       </form>
     </dialog>
-    <noscript>请启用 JavaScript 后使用生活账本。</noscript>
+    <dialog class="entry-dialog purge-dialog" id="purge-dialog" aria-labelledby="purge-heading" aria-describedby="purge-warning">
+      <form>
+        <h2 id="purge-heading">清空已删除账单</h2>
+        <p id="purge-warning"></p>
+        <p class="form-error" id="purge-error" role="alert"></p>
+        <div class="form-actions">
+          <button class="button secondary" type="button" data-cancel autofocus>取消</button>
+          <button class="button danger" type="submit">永久清空</button>
+        </div>
+      </form>
+    </dialog>
+    <noscript>请启用 JavaScript 后使用 Ledger。</noscript>
   </body>
 </html>
