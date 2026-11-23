@@ -11,8 +11,8 @@
     <link rel="apple-touch-icon" href="./ledger-comet-180.png" />
     <link rel="manifest" href="./ledger.webmanifest" />
     <title>Ledger</title>
-    <script type="module" crossorigin src="./index-r7-_VQlk.js"></script>
-    <link rel="stylesheet" crossorigin href="./index-BsH-TLjj.css">
+    <script type="module" crossorigin src="./index-CRn37YYa.js"></script>
+    <link rel="stylesheet" crossorigin href="./index-BY3MH3ot.css">
   </head>
   <body>
     <div id="startup-greeting" class="startup-greeting" aria-hidden="true" hidden>
@@ -148,10 +148,18 @@
               <span>金额（元）</span>
               <input name="amount" type="text" inputmode="decimal" placeholder="0.00" maxlength="24" aria-describedby="form-error" required />
             </label>
-            <label class="field" id="income-date-field" hidden>
-              <span>到账日期</span>
-              <input name="incomeDate" type="date" min="0001-01-01" max="9999-12-31" disabled required />
-            </label>
+            <details class="entry-disclosure date-disclosure" id="income-date-field" hidden>
+              <summary>
+                <span>到账日期</span>
+                <span class="entry-disclosure-value"></span>
+              </summary>
+              <div class="entry-disclosure-fields">
+                <label class="field">
+                  <span>选择到账日期</span>
+                  <input name="incomeDate" type="date" min="0001-01-01" max="9999-12-31" disabled required />
+                </label>
+              </div>
+            </details>
             <div id="income-note-slot" hidden></div>
             <div class="expense-settings">
               <details id="expense-date" class="entry-disclosure">
@@ -198,12 +206,20 @@
     </dialog>
     <dialog class="entry-dialog" id="cycle-dialog" aria-labelledby="cycle-form-heading">
       <form>
-        <h2 id="cycle-form-heading">开始周期</h2>
+        <h2 id="cycle-form-heading" tabindex="-1" autofocus>开始周期</h2>
         <div class="form-fields">
-          <label class="field">
-            <span>周期开始日期</span>
-            <input name="startDate" type="date" min="0001-01-01" max="9999-12-02" required />
-          </label>
+          <details class="entry-disclosure date-disclosure" id="cycle-start-date">
+            <summary>
+              <span>周期开始日期</span>
+              <span class="entry-disclosure-value"></span>
+            </summary>
+            <div class="entry-disclosure-fields">
+              <label class="field">
+                <span>选择开始日期</span>
+                <input name="startDate" type="date" min="0001-01-01" max="9999-12-02" required />
+              </label>
+            </div>
+          </details>
           <label class="field">
             <span>本期生活费到账</span>
             <select name="incomeId" required></select>
